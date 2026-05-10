@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panchanga PDF Archive</title>
+    <meta
+      name="description"
+      content="Browse, search, and filter archived Nepali Panchanga PDFs."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <div>
+          <h1 class="title">Panchanga PDF Archive</h1>
+          <p class="subtitle">
+            Archived and scanned Nepali Panchanga PDFs for quick browsing.
+          </p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__value" id="statCount">-</div>
+            <div class="stat__label">PDFs</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value" id="statYears">-</div>
+            <div class="stat__label">Years</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <section class="controls" aria-label="Search and filters">
+          <div class="controls__row">
+            <label class="field" for="searchInput">
+              <span class="field__label">Search</span>
+              <input
+                id="searchInput"
+                class="input"
+                type="search"
+                placeholder="Type a year or filename..."
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="field" for="yearSelect">
+              <span class="field__label">Year</span>
+              <select id="yearSelect" class="select">
+                <option value="all">All years</option>
+              </select>
+            </label>
+
+            <div class="field field--view">
+              <span class="field__label">View</span>
+              <div class="viewToggle" role="group" aria-label="List or grid view">
+                <button
+                  id="btnGrid"
+                  class="toggle is-active"
+                  type="button"
+                  aria-pressed="true"
+                >
+                  Grid
+                </button>
+                <button
+                  id="btnList"
+                  class="toggle"
+                  type="button"
+                  aria-pressed="false"
+                >
+                  List
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls__meta">
+            <span class="pill" id="activeFilters">Showing all PDFs</span>
+            <span class="muted" id="resultsCount">- results</span>
+          </div>
+        </section>
+
+        <section class="results" aria-label="PDF results">
+          <div id="resultsGrid" class="grid grid--grid" data-view="grid"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="muted">
+          Tip: If you add new PDFs, re-run
+          <code>node scripts/generate-pdfs-json.mjs</code> to refresh the index.
+        </div>
+      </div>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
+

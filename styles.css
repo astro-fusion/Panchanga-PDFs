@@ -1,0 +1,323 @@
+:root {
+  /* Light mode palette (default).
+     We can introduce a dark + gradient palette later behind a toggle. */
+  --bg: #f7f8fc;
+  --panel: rgba(255, 255, 255, 0.9);
+  --panel2: rgba(255, 255, 255, 1);
+  --border: rgba(15, 23, 42, 0.12);
+  --text: rgba(15, 23, 42, 0.92);
+  --muted: rgba(15, 23, 42, 0.66);
+  --muted2: rgba(15, 23, 42, 0.44);
+  --accent: #6d28d9;
+  --accent2: #16a34a;
+  --danger: #dc2626;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.header {
+  padding: 34px 0 18px;
+}
+
+.header__inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.stats {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-width: 130px;
+}
+
+.stat__value {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.stat__label {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.main {
+  padding: 10px 0 48px;
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.controls__row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controls__meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.pill {
+  background: rgba(109, 40, 217, 0.1);
+  border: 1px solid rgba(109, 40, 217, 0.25);
+  color: rgba(15, 23, 42, 0.88);
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 240px;
+}
+
+.field--view {
+  min-width: auto;
+}
+
+.field__label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.input,
+.select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: rgba(15, 23, 42, 0.45);
+}
+
+.input:focus,
+.select:focus {
+  border-color: rgba(109, 40, 217, 0.65);
+}
+
+.viewToggle {
+  display: inline-flex;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.toggle {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.toggle.is-active {
+  background: rgba(109, 40, 217, 0.14);
+  border-color: rgba(109, 40, 217, 0.34);
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.results {
+  margin-top: 18px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.grid--grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 142px;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: rgba(109, 40, 217, 0.5);
+  background: var(--panel2);
+}
+
+.card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.badge {
+  background: rgba(22, 163, 74, 0.12);
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  color: rgba(15, 23, 42, 0.9);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.card__title {
+  font-weight: 850;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.card__sub {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.card__actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.download {
+  color: rgba(15, 23, 42, 0.86);
+  font-weight: 800;
+  background: rgba(109, 40, 217, 0.11);
+  border: 1px solid rgba(109, 40, 217, 0.28);
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+.arrow {
+  color: var(--muted2);
+  font-weight: 800;
+}
+
+.grid--list {
+  grid-template-columns: 1fr;
+}
+
+.card.card--list {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 92px;
+}
+
+.card.card--list .card__title,
+.card.card--list .card__sub {
+  text-align: left;
+}
+
+.card.card--list .card__actions {
+  margin-top: 0;
+}
+
+.footer {
+  padding: 26px 0 40px;
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
