@@ -54,17 +54,19 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
-function renderCards(files, view) {
-  const resultsGrid = el("resultsGrid");
-  resultsGrid.innerHTML = "";
+function getFileLabel(file, allFiles) {
+  const sameYear = allFiles.filter((f) => f.year === file.year);
+  if (!file.year || sameYear.length <= 1) return "Archived scan";
+  const index = sameYear.findIndex((f) => f.filename === file.filename) + 1;
+  return `Scan ${index} of ${sameYear.length}`;
+}
 
-  resultsGrid.classList.remove("grid--grid", "grid--list");
-  resultsGrid.classList.add(view === "list" ? "grid--list" : "grid--grid");
-
+function renderCardsInto(container, files, view, allFiles) {
   for (const f of files) {
     const yearLabel = f.year ? String(f.year) : "Unknown year";
     const sizeLabel = formatBytes(f.sizeBytes);
     const modifiedLabel = formatDate(f.modifiedISO);
+    const fileLabel = getFileLabel(f, allFiles);
 
     const card = document.createElement("a");
     card.className = `card ${view === "list" ? "card--list" : ""}`;
@@ -83,7 +85,7 @@ function renderCards(files, view) {
 
       <div>
         <div class="card__title">${escapeHtml(f.title)}</div>
-        <div class="card__sub">${escapeHtml(f.filename)}</div>
+        <div class="card__sub">${escapeHtml(fileLabel)} · ${escapeHtml(f.filename)}</div>
       </div>
 
       <div class="card__actions">
@@ -92,7 +94,55 @@ function renderCards(files, view) {
       </div>
     `;
 
-    resultsGrid.appendChild(card);
+    container.appendChild(card);
+  }
+}
+
+function groupByYear(files) {
+  const groups = new Map();
+  for (const f of files) {
+    const key = f.year ? String(f.year) : "Unknown year";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(f);
+  }
+  return Array.from(groups.entries()).sort(([a], [b]) => {
+    if (a === "Unknown year") return 1;
+    if (b === "Unknown year") return -1;
+    return Number(b) - Number(a);
+  });
+}
+
+function renderCards(files, view, allFiles) {
+  const resultsGrid = el("resultsGrid");
+  resultsGrid.innerHTML = "";
+  resultsGrid.className = "resultsList";
+
+  if (files.length === 0) {
+    resultsGrid.innerHTML = `
+      <div class="empty">
+        <div class="empty__title">No PDFs found</div>
+        <div class="empty__text">Try a different year or search term.</div>
+      </div>
+    `;
+    return;
+  }
+
+  for (const [year, yearFiles] of groupByYear(files)) {
+    const section = document.createElement("section");
+    section.className = "yearGroup";
+    section.innerHTML = `
+      <div class="yearGroup__header">
+        <div>
+          <div class="yearGroup__eyebrow">Bikram Sambat year</div>
+          <h2 class="yearGroup__title">${escapeHtml(year)}</h2>
+        </div>
+        <div class="yearGroup__count">${yearFiles.length} PDF${yearFiles.length === 1 ? "" : "s"}</div>
+      </div>
+      <div class="grid ${view === "list" ? "grid--list" : "grid--grid"}"></div>
+    `;
+
+    renderCardsInto(section.querySelector(".grid"), yearFiles, view, allFiles);
+    resultsGrid.appendChild(section);
   }
 }
 
@@ -116,13 +166,19 @@ async function main() {
   el("statCount").textContent = `${files.length}`;
   const years = Array.from(new Set(files.map((f) => f.year).filter(Boolean))).sort((a, b) => b - a);
   el("statYears").textContent = `${years.length}`;
+  const countsByYear = files.reduce((acc, f) => {
+    if (!f.year) return acc;
+    acc.set(f.year, (acc.get(f.year) ?? 0) + 1);
+    return acc;
+  }, new Map());
 
   // Populate filters
   const yearSelect = el("yearSelect");
   for (const y of years) {
     const opt = document.createElement("option");
     opt.value = String(y);
-    opt.textContent = String(y);
+    const count = countsByYear.get(y) ?? 0;
+    opt.textContent = `${y} (${count})`;
     yearSelect.appendChild(opt);
   }
 
@@ -176,7 +232,7 @@ async function main() {
       el("activeFilters").textContent = `Showing all PDFs`;
     }
 
-    renderCards(filtered, state.view);
+    renderCards(filtered, state.view, files);
   }
 
   el("searchInput").addEventListener("input", (e) => {
